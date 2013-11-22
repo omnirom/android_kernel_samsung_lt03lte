@@ -2171,6 +2171,7 @@ static int mdp3_probe(struct platform_device *pdev)
 	.fb_mem_get_iommu_domain = mdp3_fb_mem_get_iommu_domain,
 	.panel_register_done = mdp3_panel_register_done,
 	.fb_stride = mdp3_fb_stride,
+	.check_dsi_status = mdp3_check_dsi_ctrl_status,
 	};
 
 	struct mdp3_intr_cb underrun_cb = {

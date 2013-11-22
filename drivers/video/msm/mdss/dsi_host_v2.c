@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -524,8 +524,11 @@ void msm_dsi_controller_cfg(int enable)
 	if (readl_poll_timeout((ctrl_base + DSI_STATUS),
 				status,
 				((status & 0x02) == 0),
-				DSI_POLL_SLEEP_US, DSI_POLL_TIMEOUT_US))
+				DSI_POLL_SLEEP_US, DSI_POLL_TIMEOUT_US)) {
 		pr_err("%s: DSI status=%x failed\n", __func__, status);
+		pr_err("%s: Doing sw reset\n", __func__);
+		msm_dsi_sw_reset();
+	}
 
 	/* Check for x_HS_FIFO_EMPTY */
 	if (readl_poll_timeout((ctrl_base + DSI_FIFO_STATUS),
@@ -948,6 +951,7 @@ void msm_dsi_cmdlist_rx(struct mdss_dsi_ctrl_pdata *ctrl,
 	if (req->cb)
 		req->cb(len);
 }
+
 int msm_dsi_cmdlist_commit(struct mdss_dsi_ctrl_pdata *ctrl, int from_mdp)
 {
 	struct dcs_cmd_req *req;
@@ -962,8 +966,7 @@ int msm_dsi_cmdlist_commit(struct mdss_dsi_ctrl_pdata *ctrl, int from_mdp)
 		return ret;
 	}
 
-	mutex_lock(&ctrl->cmd_mutex);
-	req = mdss_dsi_cmdlist_get(ctrl);
+	msm_dsi_cmd_dma_rx(rp, cnt);
 
 	if (!req) {
 		mutex_unlock(&ctrl->cmd_mutex);
