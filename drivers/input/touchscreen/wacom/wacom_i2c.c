@@ -1117,7 +1117,7 @@ static int wacom_firmware_update(struct wacom_i2c *wac_i2c)
 	if (ret)
 		goto failure;
 
-	if (wac_i2c->wac_feature->fw_ic_version < wac_i2c->wac_feature->fw_version) {	
+	if (wac_i2c->wac_feature->fw_ic_version != wac_i2c->wac_feature->fw_version) {	
 		/*start firm update*/
 		dev_info(&wac_i2c->client->dev,
 				"%s: Start firmware flashing (kernel image).\n",
