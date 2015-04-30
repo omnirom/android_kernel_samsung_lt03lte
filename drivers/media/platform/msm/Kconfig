@@ -35,7 +35,12 @@ config MSMB_CAMERA_DEBUG
 	  Enable printk() debug for msm camera 2.0
 
 if MSMB_CAMERA
+if CONFIG_SEC_LT03_PROJECT
+source "drivers/media/platform/msm/camera_samsung/Kconfig"
+endif # CONFIG_SEC_LT03_PROJECT
+if !CONFIG_SEC_LT03_PROJECT
 source "drivers/media/platform/msm/camera_v2/Kconfig"
+endif # !CONFIG_SEC_LT03_PROJECT
 endif # MSMB_CAMERA
 
 source "drivers/media/platform/msm/vidc/Kconfig"
