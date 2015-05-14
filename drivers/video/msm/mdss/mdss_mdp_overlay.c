@@ -168,6 +168,11 @@ int mdss_mdp_overlay_req_check(struct msm_fb_data_type *mfd,
 		return -EOVERFLOW;
 	}
 
+	pr_info("VALID source image img wh=%dx%d rect=%d,%d,%d,%d\n",
+		req->src.width, req->src.height,
+		req->src_rect.x, req->src_rect.y,
+		req->src_rect.w, req->src_rect.h);
+
 	if (req->dst_rect.w < min_dst_size || req->dst_rect.h < min_dst_size) {
 		pr_err("invalid destination resolution (%dx%d)",
 		       req->dst_rect.w, req->dst_rect.h);
